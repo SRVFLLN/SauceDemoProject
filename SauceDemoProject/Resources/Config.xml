@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<config>
+	<startUrl>https://www.saucedemo.com</startUrl>
+	<password>secret_sauce</password>
+	<fName>John</fName>
+	<lName>Smith</lName>
+	<zipCode>10001</zipCode>
+</config>
