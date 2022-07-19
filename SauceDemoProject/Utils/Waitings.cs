@@ -33,5 +33,11 @@ namespace SauceDemoProject
             wait.PollingInterval = TimeSpan.FromMilliseconds(400);
             wait.Until(drv => SingletonDriver.Source.FindElement(locator).Displayed == true);
         }
+
+        public static void WaitUntilCondition(Func<IWebDriver, bool> condition) 
+        {
+            wait.PollingInterval = TimeSpan.FromMilliseconds(400);
+            wait.Until(condition);
+        }
     }
 }

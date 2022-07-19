@@ -34,12 +34,24 @@ namespace SauceDemoProject.Elements
 
         protected IList<IWebElement> FindElements() => SingletonDriver.Source.FindElements(_locator);
 
-        public void Click(int countOfTryes = 0, params Exception[] handledException)
+        public void Click(Func<IWebDriver,bool> condition = null, int countOfTryes = 0, params Exception[] exceptionsForHandle)
         {
             try
             {
                 Waitings.WaitForElementIsDisplayed(this);
+                List<Exception> handledException = new List<Exception>();
+                handledException.Add(new WebDriverTimeoutException());
+                if (exceptionsForHandle != null) 
+                { 
+                    handledException.AddRange(exceptionsForHandle); 
+                }
                 Logger.Info($"Click on {_name} element...");
+                if (condition != null)
+                {
+                    FindElement().Click();
+                    Waitings.WaitUntilCondition(condition);
+                    return;
+                }
                 if (countOfTryes != 0) 
                 {
                     while (countOfTryes > 0) 
