@@ -3,9 +3,13 @@
     public class Product
     {
         public int? Id { get; set; }
+
         public string Name { get; set; }
+
         public string Discription { get; set; }
-        public float Price { get; set; }
+
+        public double Price { get; set; }
+
         public string ImageLink { get; set; }
 
         public override bool Equals(object obj)

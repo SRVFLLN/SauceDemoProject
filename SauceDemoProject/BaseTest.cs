@@ -1,4 +1,7 @@
 ﻿using NUnit.Framework;
+using NUnit.Framework.Interfaces;
+using SauceDemoProject.Utils;
+using System;
 
 namespace SauceDemoProject
 {
@@ -13,6 +16,11 @@ namespace SauceDemoProject
         [TearDown]
         public void TearDown() 
         {
+            if (TestContext.CurrentContext.Result.Outcome == ResultState.Failure)
+            {
+                ScreenshotTool.GetScreenshot(SingletonDriver.Source);
+                Console.WriteLine($"Check out why the test failed, look here: TestArtifacts/{TestContext.CurrentContext.Test.FullName}.png" );
+            }
             SingletonDriver.Quit();
         }
     }

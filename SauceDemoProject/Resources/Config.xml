@@ -1,6 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <config>
 	<startUrl>https://www.saucedemo.com</startUrl>
+	<username>standard_user</username>
+	<problemUser>problem_user</problemUser>
+	<lockedUser>locked_out_user</lockedUser>
 	<password>secret_sauce</password>
 	<fName>John</fName>
 	<lName>Smith</lName>
