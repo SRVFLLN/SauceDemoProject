@@ -1,6 +1,5 @@
 ﻿using OpenQA.Selenium.Support.UI;
 using System;
-using SeleniumExtras.WaitHelpers;
 using OpenQA.Selenium;
 using SauceDemoProject.Elements;
 

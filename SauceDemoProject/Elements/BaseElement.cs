@@ -20,19 +20,17 @@ namespace SauceDemoProject.Elements
 
         protected IWebElement FindElement()
         {
-            //try
-            //{
+            try
+            {
                 Waitings.WaitForElementIsDisplayed(this);
                 return SingletonDriver.Source.FindElement(_locator);
-            //}
-            //catch 
-            //{
-            //    Logger.Error($"Element with locator {_locator} not found!");
-            //    throw;
-            //}
+            }
+            catch
+            {
+                Logger.Error($"Element with locator {_locator} not found!");
+                throw;
+            }
         }
-
-        protected IList<IWebElement> FindElements() => SingletonDriver.Source.FindElements(_locator);
 
         public void Click(Func<IWebDriver,bool> condition = null, int countOfTryes = 0, params Exception[] exceptionsForHandle)
         {
@@ -48,9 +46,16 @@ namespace SauceDemoProject.Elements
                 Logger.Info($"Click on {_name} element...");
                 if (condition != null)
                 {
-                    FindElement().Click();
-                    Waitings.WaitUntilCondition(condition);
-                    return;
+                    try
+                    {
+                        FindElement().Click();
+                        Waitings.WaitUntilCondition(condition);
+                        return;
+                    }
+                    catch 
+                    {
+                        return;
+                    }
                 }
                 if (countOfTryes != 0) 
                 {
