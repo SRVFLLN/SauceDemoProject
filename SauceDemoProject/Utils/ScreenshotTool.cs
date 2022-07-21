@@ -26,7 +26,7 @@ namespace SauceDemoProject.Utils
             try
             {
                 var timeStamp = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
-                filename = TestContext.CurrentContext.Test.FullName;
+                filename = TestContext.CurrentContext.Test.FullName.Replace("\"","'");
                 string ext = ".png";
                 filename += timeStamp;
                 filename = saveLocation + filename + ext;
