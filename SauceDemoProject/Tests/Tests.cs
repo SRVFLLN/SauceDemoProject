@@ -5,6 +5,7 @@ using SauceDemoProject.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections;
 
 namespace SauceDemoProject
 {
@@ -46,12 +47,21 @@ namespace SauceDemoProject
             Assert.IsTrue(loginPage.IsLockedOutMsgPresent(), "Message about user is locked out not displayed");
         }
 
-        private static int[] Products => new int[] { 0, 1, 2, 3, 4, 5 };
         private static string[] UserNames => new string[] { ConfigTool.GetTagValue("username"), ConfigTool.GetTagValue("problemUser") };
+        private static IEnumerable TestCases 
+        {
+            get 
+            {
+                for (int i = 0; i < 6; i++)
+                    yield return new TestCaseData(i, UserNames[0]);
+                for (int i = 0; i < 6; i++)
+                    yield return new TestCaseData(i, UserNames[1]);
+            }
+        }
 
         // Test case in Trello:
         // https://trello.com/c/E9qUbfmf
-        [Test, TestCaseSource("Products"), TestCaseSource("UserNames")]
+        [Test, TestCaseSource("TestCases")]
         public void ProductInfoMatch(int productId, string username) 
         {
             var loginPage = new LoginPage();
@@ -202,7 +212,7 @@ namespace SauceDemoProject
             cartPage.OpenCheckoutPage();
             var checkoutInfoPage = new CheckoutInfoPage();
             Assert.IsTrue(checkoutInfoPage.IsPageOpen, "Checkout page not opened");
-            checkoutInfoPage.FillInfoForm("nm", "ln", "1001");
+            checkoutInfoPage.FillInfoForm(ConfigTool.GetTagValue("fName"),ConfigTool.GetTagValue("lName"),ConfigTool.GetTagValue("zipCode"));
             checkoutInfoPage.ClickOnContinueButton();
             var overviewPage = new OverviewPage();
             Assert.IsTrue(overviewPage.IsPageOpen, "Overview page not opened");
@@ -232,7 +242,7 @@ namespace SauceDemoProject
             cartPage.OpenCheckoutPage();
             var checkoutInfoPage = new CheckoutInfoPage();
             Assert.IsTrue(checkoutInfoPage.IsPageOpen, "Checkout page not opened");
-            checkoutInfoPage.FillInfoForm("Name", "Fam", "1001");
+            checkoutInfoPage.FillInfoForm(ConfigTool.GetTagValue("fName"), ConfigTool.GetTagValue("lName"), ConfigTool.GetTagValue("zipCode"));
             checkoutInfoPage.ClickOnContinueButton();
             var overviewPage = new OverviewPage();
             Assert.IsTrue(overviewPage.IsPageOpen, "Overview page not opened");

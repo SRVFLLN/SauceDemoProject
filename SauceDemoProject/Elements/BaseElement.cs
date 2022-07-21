@@ -1,7 +1,6 @@
 ﻿using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SauceDemoProject.Elements
 {
@@ -32,59 +31,70 @@ namespace SauceDemoProject.Elements
             }
         }
 
-        public void Click(Func<IWebDriver,bool> condition = null, int countOfTryes = 0, params Exception[] exceptionsForHandle)
+        public void Click(int countOfAttempts, params Exception[] exceptionsForHandle)
         {
             try
             {
                 Waitings.WaitForElementIsDisplayed(this);
-                List<Exception> handledException = new List<Exception>();
-                handledException.Add(new WebDriverTimeoutException());
+                List<Exception> handledException = null;
                 if (exceptionsForHandle != null) 
-                { 
+                {
+                    handledException = new List<Exception>();
                     handledException.AddRange(exceptionsForHandle); 
                 }
                 Logger.Info($"Click on {_name} element...");
-                if (condition != null)
+                while (countOfAttempts > 0)
                 {
                     try
                     {
                         FindElement().Click();
-                        Waitings.WaitUntilCondition(condition);
-                        return;
+                        countOfAttempts--;
                     }
-                    catch 
+                    catch (Exception ex)
                     {
-                        return;
-                    }
-                }
-                if (countOfTryes != 0) 
-                {
-                    while (countOfTryes > 0) 
-                    {
-                        try
+                        if (handledException.Contains(ex))
                         {
-                            FindElement().Click();
-                            countOfTryes--;
+                            countOfAttempts--;
                         }
-                        catch(Exception ex)
+                        else
                         {
-                            if (handledException.Contains(ex))
-                            {
-                                countOfTryes--;
-                            }
-                            else 
-                            {
-                                throw;
-                            }
+                            throw;
                         }
                     }
                 }
-                FindElement().Click();
             }
             catch(Exception e)
             {
                 Logger.Error($"Element with locator {_locator} is not clicable! {e.Message}");
                 throw;
+            }
+        }
+
+        public void Click(Func<IWebDriver, bool> condition = null) 
+        {
+            try
+            {
+                Waitings.WaitForElementIsDisplayed(this);
+                FindElement().Click();
+                Waitings.WaitUntilCondition(condition);
+                return;
+            }
+            catch
+            {
+                return;
+            }
+        }
+
+        public void Click() 
+        {
+            try
+            {
+                Waitings.WaitForElementIsDisplayed(this);
+                FindElement().Click();
+            }
+            catch(Exception e)
+            {
+                Logger.Error($"Element with locator {_locator} is not clicable! {e.Message}");
             }
         }
 
@@ -118,11 +128,6 @@ namespace SauceDemoProject.Elements
                 Logger.Error($"{_name} don't have {attribute} attribute!",e.Message);
                 throw;
             }
-        }
-
-        public IWebElement GetElement() 
-        {
-            return FindElement();
         }
     }
 }
